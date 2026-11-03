@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'">
+  <title>译间 · 中英互译</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h15m-4-4 4 4-4 4M20 16H5m4 4-4-4 4-4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="m9 3-.7 2.2-2 .9L4 5.8l-2 3.4 1.5 1.8v2L2 14.8 4 18l2.3-.3 2 .9L9 21h4l.7-2.4 2-.9 2.3.3 2-3.2-1.5-1.8v-2L20 9.2l-2-3.4-2.3.3-2-.9L13 3Z" transform="translate(1 0)"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="3"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8 17h8m-7 4h6M8 17c0-4-3-4-3-8a7 7 0 0 1 14 0c0 4-3 4-3 8"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3"/></symbol>
+  </defs></svg>
+
+  <header class="titlebar">
+    <div class="window-drag titlebar-brand">
+      <img src="translator.svg" alt="中英互译图标" class="app-icon" draggable="false">
+      <strong>译间</strong><span class="brand-divider"></span><span class="brand-subtitle">中英互译</span>
+    </div>
+    <div class="window-drag drag-space"></div>
+    <button id="settingsButton" class="settings-button" title="设置" aria-label="打开设置"><svg><use href="#i-settings"/></svg><span>设置</span></button>
+    <div class="window-controls">
+      <button id="minimizeButton" title="最小化" aria-label="最小化"><svg viewBox="0 0 24 24"><path d="M6 12h12"/></svg></button>
+      <button id="maximizeButton" title="最大化 / 还原" aria-label="最大化或还原"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></button>
+      <button id="closeButton" class="window-close" title="收起到托盘" aria-label="收起到托盘"><svg><use href="#i-close"/></svg></button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="intro">
+      <div><p class="eyebrow">A LITTLE CLOSER, IN EVERY WORD.</p><h1>让表达，自在跨越。</h1><p class="intro-description">中文与英文之间，留住每一分原意。</p></div>
+      <div class="intro-art" aria-hidden="true"><span class="glyph-zh">中</span><span class="art-link">↔</span><span class="glyph-en">A</span></div>
+    </section>
+
+    <section class="workspace" aria-label="中英翻译工作区">
+      <div class="language-bar">
+        <div class="language-name"><span id="sourceBadge" class="language-badge">中</span><h2 id="sourceLabel">中文</h2><span class="language-role">原文</span></div>
+        <button id="swapButton" class="swap-button" title="交换语言与文本" aria-label="交换语言与文本"><svg><use href="#i-swap"/></svg></button>
+        <div class="language-name target-language"><span id="targetBadge" class="language-badge">A</span><h2 id="resultLabel">English</h2><span class="language-role">译文</span></div>
+      </div>
+      <div class="editors">
+        <article class="editor source-editor">
+          <label class="sr-only" for="sourceText">需要翻译的原文</label>
+          <textarea id="sourceText" placeholder="写下或粘贴一段中文…" maxlength="20000" spellcheck="false"></textarea>
+          <div class="editor-bottom"><span id="sourceCount">0 / 20,000</span><button id="clearButton" class="text-button" title="清空原文">清空</button></div>
+        </article>
+        <article class="editor result-editor">
+          <div id="resultPlaceholder" class="result-placeholder"><div class="placeholder-symbol" aria-hidden="true"><svg><use href="#i-swap"/></svg></div><p id="placeholderTitle">另一种语言，同样的意思</p><span id="placeholderDescription">译文会在这里逐步呈现</span></div>
+          <div id="resultText" class="result-text" tabindex="0" hidden></div>
+          <div class="editor-bottom"><span id="resultCount">等待翻译</span><button id="copyButton" class="text-button" disabled><svg><use href="#i-copy"/></svg>复制译文</button></div>
+        </article>
+      </div>
+      <div id="errorBanner" class="error-banner" role="alert" hidden></div>
+      <div class="workspace-toolbar">
+        <div class="translation-options">
+          <button id="modelButton" class="option-button" title="修改模型"><span class="model-dot"></span><span id="modelSummary">deepseek-flash</span><span class="chevron">⌄</span></button>
+          <span class="option-divider"></span>
+          <button id="thinkingButton" class="option-button" title="修改思考强度"><svg><use href="#i-bulb"/></svg><span id="thinkingSummary">轻量思考</span></button>
+        </div>
+        <div class="translate-actions"><kbd>Ctrl ↵</kbd><button id="translateButton" class="primary-button" disabled><span id="translateLabel">翻译</span><svg id="translateArrow"><use href="#i-arrow"/></svg><span id="translateSpinner" class="spinner" hidden></span></button><button id="stopButton" class="stop-button" hidden>停止</button></div>
+      </div>
+    </section>
+
+    <footer class="app-footer"><span id="status" role="status"><span class="status-dot"></span><span id="statusText">正在启动…</span></span><span>DeepSeek 驱动<span class="footer-dot">·</span>关闭窗口后驻留托盘</span></footer>
+  </main>
+
+  <dialog id="settingsDialog" aria-labelledby="dialogTitle">
+    <form id="settingsForm" autocomplete="off">
+      <div class="dialog-heading"><img src="translator.svg" alt="" class="dialog-icon"><button type="button" id="dialogCloseButton" class="icon-button" title="关闭设置" aria-label="关闭设置"><svg><use href="#i-close"/></svg></button></div>
+      <p class="eyebrow" id="dialogEyebrow">YOUR WORDS, CONNECTED.</p><h2 id="dialogTitle">你好，欢迎来到译间。</h2><p class="dialog-description" id="dialogDescription">连接 DeepSeek，开始你的第一段翻译。</p>
+      <label for="apiKey">DeepSeek API Key <span id="keyStatus"></span></label>
+      <div id="savedKey" class="saved-key" hidden><svg><use href="#i-check"/></svg><div><strong>密钥已保存</strong><span>每次启动自动使用，无需重复输入。</span></div><button id="changeKeyButton" type="button" class="text-button">更换</button></div>
+      <div id="keyInput" class="password-field"><input id="apiKey" type="password" placeholder="粘贴你的 API Key" autocomplete="off" spellcheck="false"><button id="toggleKeyButton" type="button" class="icon-button" title="显示密钥" aria-label="显示密钥"><svg><use href="#i-eye"/></svg></button></div>
+      <p class="field-hint" id="keyHint">只需填写并保存一次，以后启动会自动使用。</p>
+      <label for="modelId">模型 ID</label><input id="modelId" type="text" value="deepseek-flash" spellcheck="false" maxlength="200" list="modelSuggestions"><datalist id="modelSuggestions"><option value="deepseek-flash"><option value="deepseek-v4-pro"></datalist>
+      <p class="field-hint">可直接填写 DeepSeek 支持的模型 ID。</p>
+      <fieldset><legend>思考强度</legend><div class="effort-options" role="group" aria-label="思考强度"><button type="button" data-effort="none">关闭</button><button type="button" data-effort="low">低</button><button type="button" data-effort="high">高</button><button type="button" data-effort="max">极高</button></div><p class="field-hint" id="effortHint">轻量思考，兼顾翻译速度与准确性。</p></fieldset>
+      <p id="settingsError" class="settings-error" role="alert" hidden></p>
+      <button id="saveButton" type="submit" class="primary-button save-button"><span id="saveLabel">保存并开始</span><svg><use href="#i-arrow"/></svg></button>
+      <p class="privacy-note"><svg><use href="#i-lock"/></svg>密钥由 Windows 加密保存在本机，仅用于连接 DeepSeek。</p>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
